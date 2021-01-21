@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-
+from datetime import timedelta
+import django_heroku
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -39,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'user',
-    'djoser'
+    'djoser',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -121,3 +123,51 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+# AUTH
+AUTH_USER_MODEL = 'user.User'
+
+DJOSER = {
+    'SERIALIZERS': {
+        'user': 'user.serializers.CustomUserSerializer',
+        'user_create': 'user.serializers.CustomUserCreateSerializer',
+
+    },
+
+    "LOGIN_FIELD": 'email',
+    "SEND_ACTIVATION_EMAIL": True,
+    "SEND_CONFIRMATION_EMAIL": True,
+    'PASSWORD_RESET_CONFIRM_URL': 'forgot-password/set-new?uid={uid}&token={token}',
+    'ACTIVATION_URL': 'activation/?uid={uid}&token={token}',
+    'USERNAME_RESET_CONFIRM_URL': 'user/reset-username/?uid={uid}&token={token}'
+}
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+        # "rest_framework.permissions.DjangoModelPermissions",
+    ],
+    'EXCEPTION_HANDLER': 'core.mixins.custom_exception.custom_exception_handler',
+    # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'PAGE_SIZE': 1000
+}
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1000),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    },
+}
+
+django_heroku.settings(locals())
