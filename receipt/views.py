@@ -9,5 +9,5 @@ class ReceiptViewsets(ModelViewSet):
 
 
     def get_queryset(self):
-        Receipt.objects.filter(seller=self.request.user)
+        return Receipt.objects.filter(seller=self.request.user)
 

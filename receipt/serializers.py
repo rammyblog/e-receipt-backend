@@ -17,8 +17,17 @@ class ReceiptSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+    def get_user(self):
+        user = None
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            user = request.user
+        return user
+
     def create(self, validated_data):
         validated_items = validated_data.pop('item')
+        validated_data["seller"] = self.get_user()
+
         receipt_instance = Receipt.objects.create(**validated_data)
         for item in validated_items:
             created_item= Item.objects.create(**item)
