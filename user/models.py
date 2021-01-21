@@ -10,4 +10,4 @@ class User(AbstractUser):
     logo = models.URLField(max_length=500)
 
     def __str__(self):
-        return self.email
+        return self.username

@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from user.models import User
 
 
 class Item(models.Model):
@@ -16,13 +17,14 @@ class Item(models.Model):
 
 
 class Receipt(models.Model):
+    seller = models.ForeignKey(User, on_delete=models.CASCADE)
     buyer_name = models.CharField(max_length=500)
     buyer_address = models.CharField(max_length=500)
     buyer_email = models.EmailField(null=True, blank=True)
     buyer_phone_number = PhoneNumberField()
     issue_date = models.DateField()
     due_date = models.DateField()
-    item = models.ManyToManyField(Item)
+    item = models.ManyToManyField(Item, blank=True)
     notes = models.TextField()
 
     def __str__(self):

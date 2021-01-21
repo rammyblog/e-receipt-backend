@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 from djoser.compat import get_user_email_field_name, get_user_email
@@ -60,7 +60,7 @@ class CustomTokenObtainPairSerializer(CustomTokenObtainSerializer):
         token = RefreshToken.for_user(user)
         # Add custom claims
         # token[f'{get_user_type(user)}_id'] = user.email
-        token['user_id'] = user.id
+        # token['user_id'] = str(user.id)
 
         return token
 
