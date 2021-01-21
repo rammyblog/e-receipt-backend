@@ -1,3 +1,8 @@
 from django.shortcuts import render
+from .serializers import ReceiptSerializer
+from rest_framework.viewsets import ModelViewSet
 
-# Create your views here.
+
+class ReceiptViewsets(ModelViewSet):
+    serializer_class = ReceiptSerializer
+
