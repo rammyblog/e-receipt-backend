@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'user',
     'djoser',
     'drf_yasg',
-    'corsheaders'
+    'corsheaders',
+    'receipt'
 ]
 
 

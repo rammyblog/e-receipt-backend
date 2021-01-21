@@ -22,6 +22,7 @@ class CustomTokenObtainSerializer(TokenObtainSerializer, serializers.Serializer)
 
     def __init__(self, *args, **kwargs):
         super(serializers.Serializer, self).__init__(*args, **kwargs)
+        # super().__init__(*args, **kwargs)
         self.fields[self.email_field] = serializers.EmailField()
         self.fields['password'] = PasswordField()
 
