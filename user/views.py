@@ -6,6 +6,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from djoser.conf import settings
 from user.serializers import CustomTokenObtainPairSerializer
 from djoser import signals
+from rest_framework.views import APIView
 user = get_user_model()
 
 
@@ -33,7 +34,7 @@ class CustomTokenRefreshView(TokenRefreshView):
     pass
 
 
-class CustomUserViewSet(    UserViewSet):
+class CustomUserViewSet(UserViewSet):
     # permission_classes = [IsAuthenticated]
 
     def custom_get_serializers_class(self):
@@ -96,3 +97,10 @@ class CustomUserViewSet(    UserViewSet):
             to = [get_user_email(user)]
             settings.EMAIL.activation(self.request, context).send(to)
 
+
+
+class ImageUploadAPI(APIView):
+
+    def post(self, request):
+        if 'image' in request.FILES:
+            pass

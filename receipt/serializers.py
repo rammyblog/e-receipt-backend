@@ -1,16 +1,18 @@
 from rest_framework import serializers
+
+from core.mixins.CustomErrorSerializer import CustomErrorSerializer
 from .models import Item, Receipt
 
 
 
-class ItemSerializer(serializers.ModelSerializer):
+class ItemSerializer(CustomErrorSerializer,serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = '__all__'
 
 
 
-class ReceiptSerializer(serializers.ModelSerializer):
+class ReceiptSerializer(CustomErrorSerializer,serializers.ModelSerializer):
     item = ItemSerializer(many=True)
     class Meta:
         model = Receipt
