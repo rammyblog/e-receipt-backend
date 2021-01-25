@@ -85,7 +85,7 @@ class CustomUserCreateSerializer(CustomErrorSerializer, UserCreateSerializer):
         style={"input_type": "password"}, write_only=True, required=True)
     confirm_password = serializers.CharField(
         style={"input_type": "password"}, write_only=True, required=True)
-    image = serializers.ImageField(write_only=True)
+    image = serializers.ImageField(write_only=True, required=False)
 
     class Meta:
         model = User
@@ -97,10 +97,11 @@ class CustomUserCreateSerializer(CustomErrorSerializer, UserCreateSerializer):
             "confirm_password",
             "phone_number",
             "address",
-            "logo"
+            "logo",
+            'image'
 
         )
-        extra_kwargs = {'logo': {'required': False, 'read_only': True}, 'email':{'required':True}}
+        extra_kwargs = {'logo': {'required': False, 'read_only': True}, 'email': {'required': True}}
 
     @staticmethod
     def validate_email(value):
@@ -137,11 +138,15 @@ class CustomUserCreateSerializer(CustomErrorSerializer, UserCreateSerializer):
         validated_data['username'] = generate_random_username(
             chars=validated_data.get('first_name') + validated_data.get('last_name'))
         try:
+
             logo = upload_image_to_cloudinary(validated_data['image'])
             validated_data['logo'] = logo
-        except:
-            pass
+            validated_data.pop('image')
+        except Exception as e:
+            raise serializers.ValidationError(e)
+        print(validated_data)
 
+        validated_data.pop('confirm_password')
         with transaction.atomic():
             user = User.objects.create_user(**validated_data)
             if settings.DJOSER['SEND_ACTIVATION_EMAIL']:

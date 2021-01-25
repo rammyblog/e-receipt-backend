@@ -17,7 +17,7 @@ MIDDLEWARE = [
 ]
 
 cloudinary.config(
-    cloud_name="e-receipt",
+    cloud_name="rammy",
     api_key=os.environ["CLOUDINARY_API_KEY"],
     api_secret=os.environ["CLOUDINARY_API_SECRET"]
 )

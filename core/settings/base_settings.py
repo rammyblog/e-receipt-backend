@@ -122,8 +122,8 @@ DJOSER = {
     },
 
     "LOGIN_FIELD": 'email',
-    "SEND_ACTIVATION_EMAIL": True,
-    "SEND_CONFIRMATION_EMAIL": True,
+    "SEND_ACTIVATION_EMAIL": False,
+    "SEND_CONFIRMATION_EMAIL": False,
     'PASSWORD_RESET_CONFIRM_URL': 'forgot-password/set-new?uid={uid}&token={token}',
     'ACTIVATION_URL': 'activation/?uid={uid}&token={token}',
     'USERNAME_RESET_CONFIRM_URL': 'user/reset-username/?uid={uid}&token={token}'
