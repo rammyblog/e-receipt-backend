@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'user',
     'djoser',
+    'djmoney',
     'drf_yasg',
     'corsheaders',
     'receipt'

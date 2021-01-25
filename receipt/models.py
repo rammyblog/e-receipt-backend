@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from user.models import User
+from djmoney.models.fields import MoneyField
 
 
 class Item(models.Model):
@@ -9,8 +10,8 @@ class Item(models.Model):
     desc = models.TextField()
     quantity = models.PositiveIntegerField()
     unit = models.CharField(max_length=50)
-    unit_price = models.IntegerField()
-    amount = models.IntegerField()
+    unit_price = MoneyField(max_digits=19, decimal_places=4, default_currency='NGN')
+    amount = MoneyField(max_digits=19, decimal_places=4, default_currency='NGN')
 
     def __str__(self):
         return self.name

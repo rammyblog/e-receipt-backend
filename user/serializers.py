@@ -144,7 +144,7 @@ class CustomUserCreateSerializer(CustomErrorSerializer, UserCreateSerializer):
             validated_data.pop('image')
         except Exception as e:
             raise serializers.ValidationError(e)
-        print(validated_data)
+
 
         validated_data.pop('confirm_password')
         with transaction.atomic():
