@@ -10,6 +10,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from core.mixins.CustomErrorSerializer import CustomErrorSerializer
 from user.utils.random_username import generate_random_username
+from user.utils.upload_logo import upload_image_to_cloudinary
 
 User = get_user_model()
 
@@ -84,6 +85,7 @@ class CustomUserCreateSerializer(CustomErrorSerializer, UserCreateSerializer):
         style={"input_type": "password"}, write_only=True, required=True)
     confirm_password = serializers.CharField(
         style={"input_type": "password"}, write_only=True, required=True)
+    image = serializers.ImageField(write_only=True)
 
     class Meta:
         model = User
@@ -98,7 +100,7 @@ class CustomUserCreateSerializer(CustomErrorSerializer, UserCreateSerializer):
             "logo"
 
         )
-        extra_kwargs = {'logo': {'required': False}, 'email':{'required':True}}
+        extra_kwargs = {'logo': {'required': False, 'read_only': True}, 'email':{'required':True}}
 
     @staticmethod
     def validate_email(value):
@@ -134,6 +136,11 @@ class CustomUserCreateSerializer(CustomErrorSerializer, UserCreateSerializer):
     def perform_create(self, validated_data):
         validated_data['username'] = generate_random_username(
             chars=validated_data.get('first_name') + validated_data.get('last_name'))
+        try:
+            logo = upload_image_to_cloudinary(validated_data['image'])
+            validated_data['logo'] = logo
+        except:
+            pass
 
         with transaction.atomic():
             user = User.objects.create_user(**validated_data)

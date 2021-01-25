@@ -6,7 +6,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from djoser.conf import settings
 from user.serializers import CustomTokenObtainPairSerializer
 from djoser import signals
+from rest_framework import serializers
 from rest_framework.views import APIView
+
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 user = get_user_model()
 
 
@@ -99,8 +104,17 @@ class CustomUserViewSet(UserViewSet):
 
 
 
-class ImageUploadAPI(APIView):
-
-    def post(self, request):
-        if 'image' in request.FILES:
-            pass
+# class ImageUploadAPI(APIView):
+#
+#     def post(self, request):
+#         if 'image' in request.FILES:
+#             file_obj = request.FILES['image']
+#             limit_mb = 5
+#             file_size = file_obj.size
+#             if file_size > limit_mb * 1024 * 1024:
+#                 raise serializers.ValidationError(
+#                     "Max size of file is %s MB" % limit_mb)
+#
+#             cloudinary_file = cloudinary.uploader.upload(
+#                 file_obj, resource_type="raw")
+#             # cloudinary_file['secure_url']

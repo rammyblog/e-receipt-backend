@@ -1,5 +1,8 @@
 import os
+
+import cloudinary
 import django_heroku
+
 DEBUG = os.environ['DEBUG']
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MIDDLEWARE = [
@@ -12,4 +15,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+cloudinary.config(
+    cloud_name="e-receipt",
+    api_key=os.environ["CLOUDINARY_API_KEY"],
+    api_secret=os.environ["CLOUDINARY_API_SECRET"]
+)
+
 django_heroku.settings(locals())
